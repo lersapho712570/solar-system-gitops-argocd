@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: solar-system
+  name: solar-system
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: solar-system
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: solar-system
+    spec:
+      serviceAccountName: my-serviceaccount
+      containers:
+      - image: 712570/solar-system:ae4109850df03c9690c1ae3776cebf2484b23b86
+        imagePullPolicy: Always
+        name: solar-system
+        ports:
+        - containerPort: 3000
+          name: http
+          protocol: TCP
+        env:
+        - name: ENV_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: my-vault-secret
+              key: envsecret
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: my-vault-secret
+              key: mongouri
+        - name: MONGO_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: my-vault-secret
+              key: mongousername
+        - name: MONGO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: my-vault-secret
+              key: mongopassword
+        - name: ENV_CONFIGMAP
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: message
+        - name: ENV_BUILD_ID
+          value: "34"
