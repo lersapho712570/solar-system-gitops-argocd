@@ -4,7 +4,7 @@
 * **Service**
 * **Secret**
 * **DonfigMap**
-* * **ServiceAccount**
+* **ServiceAccount**
 
 
 
